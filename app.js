@@ -1,41 +1,51 @@
 
 //what happens when submit is clicked
 function onReady() {
+   const toDos = [];
    const addToDoForm = document.getElementById('addToDoForm');
-   const newToDoText = document.getElementById('newToDoText');
-   const toDoList = document.getElementById('toDoList');
 
-   addToDoForm.addEventListener('submit', () => {
-      event.preventDefault();
+   function createNewToDo() {
+      const newToDoText = document.getElementById('newToDoText');
+      //declares what we want each to-do object to be
+      if (!newToDoText.value) { return; ``}
 
-      //get the newToDoText
-      let title = newToDoText.value;
-
-      //create a new li
-      let newLi = document.createElement('li');
-
-      //create a new input
-      let checkbox = document.createElement('input');
-
-      //set the input's type to checkbox
-      checkbox.type = "checkbox";
-
-      //set the word title into the li
-      newLi.textContent = title;
-
-      //attach the checkbox to the li
-      newLi.appendChild(checkbox);
-
-      //attach the new li to the ul
-      toDoList.appendChild(newLi);
-
-      //remove text from the input fieldset
+      toDos.push({
+         title: newToDoText.value,
+         complete:false
+      })
+      //clear the text input for the user
       newToDoText.value = '';
 
+      renderTheUI();
+   }
+
+   function renderTheUI() {
+      const toDoList = document.getElementById('toDoList');
+
+      toDoList.textContent = '';
+
+      toDos.forEach(function(toDo) {
+         const newLi = document.createElement('li');
+         const checkbox = document.createElement('input');
+         checkbox.type = "checkbox";
+
+         newLi.textContent = toDo.title;
+
+         toDoList.appendChild(newLi);
+         newLi.appendChild(checkbox);
+      });
+   }
+
+   addToDoForm.addEventListener('submit', event => {
+      event.preventDefault();
+      createNewToDo();
    });
+
+   renderTheUI();
+
 }
 
 
 window.onload = function() {
-   alert("The window had loaded!");
+   onReady();
 }
